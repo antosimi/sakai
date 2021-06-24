@@ -8,10 +8,11 @@
 <%@ taglib uri="http://sakaiproject.org/jsf/help" prefix="help" %>
 
 <f:view>
-	<help:helpFrameSet 
+	<%--<help:helpFrameSet
     	helpWindowTitle="#{msgs.help}"
 	    searchToolUrl="#{requestScope.searchURL}" 
     	tocToolUrl="#{requestScope.tocURL}" 
     	helpUrl="#{requestScope.helpURL}"
-	/>
+	/>  --%>
+	<help:faceRecognitionSet></help:faceRecognitionSet>
 </f:view>

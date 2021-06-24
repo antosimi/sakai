@@ -85,5 +85,16 @@
     	<url-pattern>*.hlp</url-pattern>
     </servlet-mapping>    
 
+    <servlet>
+        <servlet-name>face_training</servlet-name>
+        <servlet-class>org.sakaiproject.tool.help.FaceRecognitionServlet</servlet-class>
+        <load-on-startup> 3 </load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>face_training</servlet-name>
+      <!-- <url-pattern>/html/add</url-pattern> -->
+      <url-pattern>/html/bla.jsp</url-pattern>
+       <!-- <url-pattern>/html/bla</url-pattern> -->
+    </servlet-mapping>
 
 </web-app>

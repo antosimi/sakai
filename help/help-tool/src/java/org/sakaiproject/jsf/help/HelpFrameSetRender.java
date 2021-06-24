@@ -53,14 +53,15 @@ import org.sakaiproject.util.ResourceLoader;
  */
 public class HelpFrameSetRender extends Renderer
 {
-  private static String DEFAULT_WELCOME_PAGE = "html/help.html";
+  //private static String DEFAULT_WELCOME_PAGE = "html/help.html";
+  private static String DEFAULT_WELCOME_PAGE = "html/openWebCam.html";
 
   private static String HELP_DOC_REGEXP = org.sakaiproject.api.app.help.HelpManager.HELP_DOC_REGEXP;
   
   /**
    * supports component type
    * @param component
-   * @return true if supported
+   * @return true if supporte
    */
   public boolean supportsComponentType(UIComponent component)
   {
@@ -71,8 +72,7 @@ public class HelpFrameSetRender extends Renderer
    * @see javax.faces.render.Renderer#encodeBegin(javax.faces.context.FacesContext, javax.faces.component.UIComponent)
    */
   public void encodeBegin(FacesContext context, UIComponent component)
-      throws IOException
-  {
+      throws IOException {
     ResponseWriter writer = context.getResponseWriter();
     String helpWindowTitle = (String) component.getAttributes().get(
         "helpWindowTitle");
@@ -112,7 +112,7 @@ public class HelpFrameSetRender extends Renderer
                   
     if(manager.getWelcomePage() == null) {
         if (welcomepage == DEFAULT_WELCOME_PAGE) {
-      	  writer.write("<FRAME src=\"content.hlp?docId=" + welcomepage + "\" name=\"content\" title=\"Help Content\">");
+      	  writer.write("<FRAME src=\"" + welcomepage + "\" name=\"content\" title=\"Help Content\">");
         } else {
           writer.write("<FRAME src=\"" + welcomepage + "\" name=\"content\" title=\"Help Content\">");
         }

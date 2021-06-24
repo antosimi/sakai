@@ -51,6 +51,11 @@ public class MockServerConfigurationService implements
 		return null;
 	}
 
+	@Override
+	public String getFaceRecignitionUrl(String helpContext) {
+		return null;
+	}
+
 	public int getInt(String name, int dflt) {
 		// TODO Auto-generated method stub
 		return 0;

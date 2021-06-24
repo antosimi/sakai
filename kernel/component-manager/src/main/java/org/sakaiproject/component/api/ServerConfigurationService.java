@@ -98,6 +98,8 @@ public interface ServerConfigurationService
 	 */
 	String getHelpUrl(String helpContext);
 
+
+	String getFaceRecignitionUrl(String helpContext);
 	/**
 	 * Access the URL to the access service on the server - append any additional path to the end.
 	 * 

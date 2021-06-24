@@ -544,7 +544,7 @@ public class SiteHandler extends WorksiteHandler
 		}
 		
 		if (SiteService.isUserSite(siteId)){
-			rcontext.put("siteTitle", rb.getString("sit_mywor") );
+
 			rcontext.put("siteTitleTruncated", rb.getString("sit_mywor") );
 			rcontext.put("isUserSite", true);
 		}else{

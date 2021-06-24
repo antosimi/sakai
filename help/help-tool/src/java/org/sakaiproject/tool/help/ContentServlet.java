@@ -29,6 +29,8 @@ import java.io.OutputStreamWriter;
 import java.net.ConnectException;
 import java.net.URL;
 
+import javax.faces.context.ResponseWriter;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -60,152 +62,171 @@ public class ContentServlet extends HttpServlet
   private ServerConfigurationService serverConfigurationService;
 
   private String[] ALLOWED_DOC_ID_URLS = {"html/help.html"};
+
+  private String[] FACE_RECOGNITON_URL={"html/openWebCam.html"};
   /**
    * @see javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
    */
   protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 
       getHelpManager().initialize();
-      String docId = req.getParameter(DOC_ID);
-      if (StringUtils.isBlank(docId) || (!StringUtils.isAlphanumeric(docId) && !ArrayUtils.contains(ALLOWED_DOC_ID_URLS, docId))) {
-          res.sendError(HttpServletResponse.SC_BAD_REQUEST);
-          return;
-      }
 
-      OutputStreamWriter writer = new OutputStreamWriter(res.getOutputStream(), "UTF-8");
-      try {
-          res.setContentType(TEXT_HTML);
+     // String docId = req.getParameter(DOC_ID);
+      String docId = "html/openWebCam.html";
+//      if (StringUtils.isBlank(docId) || (!StringUtils.isAlphanumeric(docId) && !ArrayUtils.contains(ALLOWED_DOC_ID_URLS, docId))) {
+//          res.sendError(HttpServletResponse.SC_BAD_REQUEST);
+//          return;
+//      }else {
+      if(ArrayUtils.contains(ALLOWED_DOC_ID_URLS, docId)){
 
-          URL url = null;
-          Resource resource = null;
-          
-       	  resource = getHelpManager().getResourceByDocId(docId);
-          //Possibly a fileURL
-          if (resource == null && docId != null && docId.indexOf('/') >= 0) {
-        	  if (log.isDebugEnabled())
-        		  log.debug("Adding new resource:"+docId);
-        	  resource = getHelpManager().createResource();
-        	  resource.setLocation("/"+docId);
-        	  resource.setDocId(docId);
-        	  url = new URL(req.getScheme(),req.getServerName(),req.getServerPort(),req.getContextPath()+"/"+docId);
-        	  //Can't save it without a category as is null
-        	  //getHelpManager().storeResource(resource);
-          } 
-          
-          if (resource != null)
-          {
-    	  		String sakaiHomePath = getServerConfigurationService().getSakaiHomePath();
-    	  		String localHelpPath = sakaiHomePath+getServerConfigurationService().getString("help.localpath","/help/");
-    	  		File localFile = new File(localHelpPath+resource.getLocation());
-    	  		boolean localFileIsFile = false;
-    	  		String localFileCanonicalPath = localFile.getCanonicalPath();
-    	  		if(localFileCanonicalPath.contains(localHelpPath) && localFile.isFile()) { 
-    	  			log.debug("Local help file overrides: "+resource.getLocation());
-    	  			localFileIsFile = true;
-    	  		}
+          OutputStreamWriter writer = new OutputStreamWriter(res.getOutputStream(), "UTF-8");
+          try {
+              res.setContentType(TEXT_HTML);
 
-              if (!getHelpManager().getRestConfiguration().getOrganization()
-                      .equalsIgnoreCase("sakai"))
-              {
-                  writer.write(RestContentProvider.getTransformedDocument(
-                          getServletContext(), getHelpManager(), resource));
-              } else {
-                  if (resource.getLocation().startsWith("/"))
-                  {
-                      if (!"".equals(getHelpManager().getExternalLocation()))
-                      {
-                          url = new URL(getHelpManager().getExternalLocation()
-                                  + resource.getLocation());
-                      }
-                      else
-                      {
-                    	  if(localFileIsFile) { 
-                    		  url = localFile.toURI().toURL();
-                    	  }
-                    	  else {
-                    		  //If url hasn't been set yet, look it up in the classpath
-                    		  if (url == null) {
-                    			  url = HelpManager.class.getResource(resource.getLocation());
-                    		  }
-                    	  }
-                	  }
-                      String defaultRepo = "/library/skin/";
-                      String skinRepo = getServerConfigurationService().getString("skin.repo",defaultRepo);
-                      String helpHeader = getServerConfigurationService().getString("help.header",null);
-                      String helpFooter = getServerConfigurationService().getString("help.footer",null);
-                      String resourceName = resource.getName();
-                      if (resourceName == null) {
-                    	  resourceName = "";
-                      }
-                    	  
+              URL url = null;
+              Resource resource = null;
 
-                      if (url == null) {
-                    	  log.warn("Help document " + docId + " not found at: " + resource.getLocation());
-                      } else {
-                    	  BufferedReader br = null;
-                    	  try {
-                    		  br = new BufferedReader(new InputStreamReader(url.openStream(),"UTF-8"));
-                    	  }
-                    	  catch (ConnectException e){
-                    		  log.info("ConnectException on " + url.getPath());
-                    		  res.sendRedirect(resource.getLocation());
-                    		  return;
-                    	  }
-	                      try {
-	                          String sbuf;
-	                          while ((sbuf = br.readLine()) != null)
-	                          {
-								  //Replacements because help wasn't written as a template
-	                        	  if (!skinRepo.equals(defaultRepo)) {
-	                        		  if (StringUtils.contains(sbuf,defaultRepo)) {
-	                        			  sbuf = StringUtils.replace(sbuf, defaultRepo, skinRepo + "/");
-	                        			  //Reset to only do one replacement
-	                        			  skinRepo=defaultRepo;
-	                        		  }
-	                        	  }
+              resource = getHelpManager().getResourceByDocId(docId);
+              //Possibly a fileURL
+              if (resource == null && docId != null && docId.indexOf('/') >= 0) {
+                  if (log.isDebugEnabled())
+                      log.debug("Adding new resource:" + docId);
+                  resource = getHelpManager().createResource();
+                  resource.setLocation("/" + docId);
+                  resource.setDocId(docId);
+                  url = new URL(req.getScheme(), req.getServerName(), req.getServerPort(), req.getContextPath() + "/" + docId);
+                  //Can't save it without a category as is null
+                  //getHelpManager().storeResource(resource);
+              }
 
-	                        	  if (helpHeader != null) {
-	                        		  //Hopefully nobody writes <BODY>
-	                        		  if (StringUtils.contains(sbuf,"<body>")) {
-	                        			  sbuf = StringUtils.replace(sbuf, "<body>", "<body>"+helpHeader);
-	                        			  //Reset to only do one replacement
-	                        			  //Replace special variables 
-	                        			  sbuf = StringUtils.replace(sbuf, "#ResourceBean.name", resourceName);
-	                        			  helpHeader = null;
-	                        		  }
-	                        	  }
-	                        	  if (helpFooter != null) {
-	                        		  if (StringUtils.contains(sbuf,"</body>")) {
-	                        			  sbuf = StringUtils.replace(sbuf, "</body>", helpFooter+"</body>");
-	                        			  sbuf = StringUtils.replace(sbuf, "#ResourceBean.name", resourceName);
-	                        			  //Reset to only do one replacement
-	                        			  helpFooter = null;
-	                        		  }
-	                        	  }
-															
-	                            writer.write( sbuf );
-	                            writer.write( System.getProperty("line.separator") );
-	                          }
-	                      } finally {
-	                          br.close();
-	                      }
-                      }
+              if (resource != null) {
+                  String sakaiHomePath = getServerConfigurationService().getSakaiHomePath();
+                  String localHelpPath = sakaiHomePath + getServerConfigurationService().getString("help.localpath", "/help/");
+                  File localFile = new File(localHelpPath + resource.getLocation());
+                  boolean localFileIsFile = false;
+                  String localFileCanonicalPath = localFile.getCanonicalPath();
+                  if (localFileCanonicalPath.contains(localHelpPath) && localFile.isFile()) {
+                      log.debug("Local help file overrides: " + resource.getLocation());
+                      localFileIsFile = true;
                   }
-                  else
-                  {
-                      res.sendRedirect(resource.getLocation());
+
+                  if (!getHelpManager().getRestConfiguration().getOrganization()
+                          .equalsIgnoreCase("sakai")) {
+                      writer.write(RestContentProvider.getTransformedDocument(
+                              getServletContext(), getHelpManager(), resource));
+                  } else {
+                      if (resource.getLocation().startsWith("/")) {
+                          if (!"".equals(getHelpManager().getExternalLocation())) {
+                              url = new URL(getHelpManager().getExternalLocation()
+                                      + resource.getLocation());
+                          } else {
+                              if (localFileIsFile) {
+                                  url = localFile.toURI().toURL();
+                              } else {
+                                  //If url hasn't been set yet, look it up in the classpath
+                                  if (url == null) {
+                                      url = HelpManager.class.getResource(resource.getLocation());
+                                  }
+                              }
+                          }
+                          String defaultRepo = "/library/skin/";
+                          String skinRepo = getServerConfigurationService().getString("skin.repo", defaultRepo);
+                          String helpHeader = getServerConfigurationService().getString("help.header", null);
+                          String helpFooter = getServerConfigurationService().getString("help.footer", null);
+                          String resourceName = resource.getName();
+                          if (resourceName == null) {
+                              resourceName = "";
+                          }
+
+
+                          if (url == null) {
+                              log.warn("Help document " + docId + " not found at: " + resource.getLocation());
+                          } else {
+                              BufferedReader br = null;
+                              try {
+                                  br = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
+                              } catch (ConnectException e) {
+                                  log.info("ConnectException on " + url.getPath());
+                                  res.sendRedirect(resource.getLocation());
+                                  return;
+                              }
+                              try {
+                                  String sbuf;
+                                  while ((sbuf = br.readLine()) != null) {
+                                      //Replacements because help wasn't written as a template
+                                      if (!skinRepo.equals(defaultRepo)) {
+                                          if (StringUtils.contains(sbuf, defaultRepo)) {
+                                              sbuf = StringUtils.replace(sbuf, defaultRepo, skinRepo + "/");
+                                              //Reset to only do one replacement
+                                              skinRepo = defaultRepo;
+                                          }
+                                      }
+
+                                      if (helpHeader != null) {
+                                          //Hopefully nobody writes <BODY>
+                                          if (StringUtils.contains(sbuf, "<body>")) {
+                                              sbuf = StringUtils.replace(sbuf, "<body>", "<body>" + helpHeader);
+                                              //Reset to only do one replacement
+                                              //Replace special variables
+                                              sbuf = StringUtils.replace(sbuf, "#ResourceBean.name", resourceName);
+                                              helpHeader = null;
+                                          }
+                                      }
+                                      if (helpFooter != null) {
+                                          if (StringUtils.contains(sbuf, "</body>")) {
+                                              sbuf = StringUtils.replace(sbuf, "</body>", helpFooter + "</body>");
+                                              sbuf = StringUtils.replace(sbuf, "#ResourceBean.name", resourceName);
+                                              //Reset to only do one replacement
+                                              helpFooter = null;
+                                          }
+                                      }
+
+                                      writer.write(sbuf);
+                                      writer.write(System.getProperty("line.separator"));
+                                  }
+                              } finally {
+                                  br.close();
+                              }
+                          }
+                      } else {
+                          res.sendRedirect(resource.getLocation());
+                      }
                   }
               }
-          } 
-      } finally {
-          try {
-              writer.flush();
-          } catch (IOException e) {
-              // ignore
+          } finally {
+              try {
+                  writer.flush();
+              } catch (IOException e) {
+                  // ignore
+              }
+              writer.close();
           }
-          writer.close();
       }
-  }
+
+     // if(("/content.hlp").equals( req.getPathInfo())){
+          OutputStreamWriter writer = new OutputStreamWriter(res.getOutputStream(), "UTF-8");
+          try{
+              res.setContentType(TEXT_HTML);
+
+              URL url1 = null;
+              Resource resource1 = null;
+              resource1 = getHelpManager().getResourceByDocId(docId);
+              writer.write("<div>There is some text here</div>");
+
+              RequestDispatcher view = req.getRequestDispatcher("html/openWebCam.html");
+              view.forward(req, res);
+
+
+          }finally {
+              try {
+                  writer.flush();
+              } catch (IOException e) {
+                  // ignore
+              }
+              writer.close();
+          }
+      }
+ // }
 
   /**
    * get the component manager through cover

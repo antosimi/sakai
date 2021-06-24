@@ -166,6 +166,14 @@
 
 		<renderer>
 			<component-family>javax.faces.Data</component-family>
+			<renderer-type>FaceRecognitionSet</renderer-type>
+			<renderer-class>
+				org.sakaiproject.jsf.help.FaceRecognitionSetRender
+			</renderer-class>
+		</renderer>
+
+		<renderer>
+			<component-family>javax.faces.Data</component-family>
 			<renderer-type>QuestionLink</renderer-type>
 			<renderer-class>
 				org.sakaiproject.jsf.help.QuestionLinkRender

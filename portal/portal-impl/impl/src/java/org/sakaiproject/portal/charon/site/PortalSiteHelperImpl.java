@@ -846,8 +846,10 @@ public class PortalSiteHelperImpl implements PortalSiteHelper
 		theMap.put("pageNavToolsCount", Integer.valueOf(l.size()));
 
 		String helpUrl = ServerConfigurationService.getHelpUrl(null);
+		String faceRecognitionUrl = ServerConfigurationService.getFaceRecognitionUrl(null);
 		theMap.put("pageNavShowHelp", Boolean.valueOf(showHelp));
 		theMap.put("pageNavHelpUrl", helpUrl);
+		theMap.put("pageNavFaceRecogUrl", faceRecognitionUrl);
 		theMap.put("helpMenuClass", ICON_SAKAI + "help");
 		theMap.put("subsiteClass", ICON_SAKAI + "subsite");
 

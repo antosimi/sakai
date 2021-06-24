@@ -323,6 +323,20 @@ public class BasicConfigurationService implements ServerConfigurationService, Ap
 
         return rv;
     }
+    /**
+     * {@inheritDoc}
+     */
+    public String getFaceRecignitionUrl(String helpContext)
+    {
+        String rv = getPortalUrl() + getConfig("faceRecognitionPath", "/help") + "/main"; //(String) properties.get("helpPath") + "/main";
+        if (helpContext != null)
+        {
+            rv += "?help=" + helpContext;
+        }
+
+        return rv;
+    }
+
 
     /**
      * {@inheritDoc}

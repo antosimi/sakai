@@ -127,6 +127,13 @@ public class ServerConfigurationService
 
 		return service.getHelpUrl(param0);
 	}
+	public static java.lang.String getFaceRecognitionUrl(java.lang.String param0)
+	{
+		org.sakaiproject.component.api.ServerConfigurationService service = getInstance();
+		if (service == null) return null;
+
+		return service.getFaceRecignitionUrl(param0);
+	}
 
 	public static java.lang.String getPortalUrl()
 	{

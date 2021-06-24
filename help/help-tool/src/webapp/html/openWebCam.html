@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+    <link rel="stylesheet" href="../css/openWebCam.css">
+    <script defer src="../js/face-api.min.js"></script>
+    <script defer src="../js/trainWebCamera.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+
+    <meta charset="utf-8">
+    <title>Display Webcam Stream</title>
+
+    <!--<style>
+        #container {
+            margin: 0px auto;
+            width: 500px;
+            height: 375px;
+            border: 10px #333 solid;
+        }
+        #videoElement {
+            width: 500px;
+            height: 375px;
+            background-color: #666;
+        }
+    </style> -->
+    <style>
+        canvas {
+            position: absolute;
+        }
+    </style>
+
+</head>
+
+<body>
+<div id="anto">BUNAAA ANTOOO13s
+</div>
+<div id="container">
+    <video autoplay="true" id="videoElement">
+
+    </video>
+
+
+</div>
+<button type="button" onclick="openWebCamera()">Try it</button>
+<button type="button" onclick="takepicture()">Pozaaaa</button>
+
+<button type="button" onclick="trimiteCeva()">Trimite ceva</button>
+<div> <h1>Bonjour ...</h1></div>
+<div>
+    <input type='file' id="asd" />
+    <img id="img" src="" />
+    <div id="base"></div>
+    <br>
+    <h2 id="oduda">O duda....</h2>
+</div>
+
+<div>
+
+<br>
+<br>
+<label for="email_tag">Email :</label>
+<input type="text" id="email_tag" name="email_tag"><br><br>
+
+</div>
+
+<div id="ceva1">SALUTAREEE</div>
+<br>
+<br>
+<div id="ceva2">Bun bun</div>
+
+<canvas id="canvas" width="500" height="500">
+</canvas>
+<!--<script>
+
+    var video = document.querySelector("#videoElement");
+
+    if (navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function (stream) {
+                video.srcObject = stream;
+            })
+            .catch(function (err0r) {
+                console.log("Something went wrong!");
+            });
+    }
+
+</script> -->
+
+</body>
+</html>

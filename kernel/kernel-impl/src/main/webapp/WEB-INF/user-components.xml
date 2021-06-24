@@ -117,5 +117,8 @@
 	</bean>
 
 
+	<bean id="org.sakaiproject.user.impl.DBFaceRecognitionService.face_face"
+		  class="org.sakaiproject.user.impl.DBFaceRecognitionService">
+	</bean>
 
 </beans>

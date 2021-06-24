@@ -83,6 +83,12 @@
         </attribute>
     </tag>
     <tag>
+        <name>faceRecognitionSet</name>
+        <tag-class>org.sakaiproject.jsf.help.FaceRecognitionSetTag</tag-class>
+        <body-content>JSP</body-content>
+        <description/>
+    </tag>
+    <tag>
         <name>questionLink</name>
         <tag-class>org.sakaiproject.jsf.help.QuestionLinkTag</tag-class>
         <body-content>JSP</body-content>

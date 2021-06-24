@@ -1,5 +1,5 @@
 ## $Header: /cvs/sakai2/legacy/tools/src/webapp/vm/admin/chef_users_create.vm,v 1.2 2005/05/24 19:36:12 gsilver.umich.edu Exp $
-
+<html xmlns:th="http://www.thymeleaf.org">
 #css("/admin-tools/css/sakai-user-tool.css" 'media="screen"')
 
 ${includeLatestJQuery}
@@ -7,17 +7,15 @@ ${includeLatestJQuery}
 <script type="text/javascript">USER.isPasswordPolicyEnabled =#if ($!isPasswordPolicyEnabled) true; #else false; #end</script>
 #javascript("/admin-tools/js/userCreateValidation.js")
 #javascript("/library/js/spinner.js")
-#javascript("face_recognition/web/js/faceRecongitionCommon.js")
 
 <div class="portletBody">
 #if($menu)
 	#toolbar($menu)
 #end
-
 	#if ($successMessage)<span class="sak-banner-success">$successMessage</span>#end
 
 	<h3>
-		$tlang.getString("usecre.entthe")
+		$tlang.getString("usecre.entthe") ANTOO27
 	</h3>
 
 	#if ($alertMessage)<div class="sak-banner-error">$tlang.getString("useconrem.alert") $formattedText.escapeHtml($alertMessage)</div>#end
@@ -169,19 +167,10 @@ ${includeLatestJQuery}
 			<div class="act">
 				<input type="submit" id="eventSubmit_doSave" class="active"  name="eventSubmit_doSave" #if ($isValidatedWithAccountValidator) value="$tlang.getString("usecre.reqaco")" #else value="$tlang.getString("usecre.creaco")" #end accesskey="s" onclick="SPNR.disableControlsAndSpin( this, null );" />
 				<input type="submit" id="eventSubmit_doCancel" name="eventSubmit_doCancel" value="$tlang.getString("useconrem.can")" accesskey="x" onclick="SPNR.disableControlsAndSpin( this, null );" />
-				<input type="submit" id="eventSubmit_faceRecognition" name="eventSubmit_faceRecognition" value="$tlang.getString("usecre.facerec")" onclick="USER.doFaceRec1();" />
-				<input type="submit" id="eventSubmit_faceRecognitionAnto" name="eventSubmit_faceRecognition" value="E BELEA CU MINE" onclick="USER.doFaceRec();" />
+				<input type="submit" id="eventSubmit_faceRecognition" name="eventSubmit_faceRecognition" value="$tlang.getString("usecre.facerec")" onclick="openWindow('http://localhost:8080/portal/help/main', 'Face Recognition', 'resizable=yes,toolbar=no,scrollbars=yes,menubar=yes,width=1024,height=768'); return false" />
+				<input type="submit" id="eventSubmit_faceRecognition11" name="eventSubmit_faceRecognition11" value="cacat" onclick="USER.doFaceRec1()" />
 				<input type="hidden" name="sakai_csrf_token" value="$sakai_csrf_token" />
-				<div style="display: none" id="hai_copii">
-					<h3>
-						Hai copii ca putem
-					</h3>
-				</div>
-				<div style="display: none" id="hai_copii_iar">
-					<h3>
-						Hai copii ca putem IAR !!!!
-					</h3>
-				</div>
 		</fieldset>
 	</form>
 </div>
+</html>
