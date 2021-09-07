@@ -9,3 +9,24 @@
     height: 375px;
     background-color: #666;
 }
+
+canvas {
+    position: absolute;
+}
+.loginFaceTitle{
+    alignment: center;
+    font-weight: bold;
+    color: red;
+}
+h1.loginFaceTitle{
+    color:purple;
+}
+.loginFaceBar {
+    background: #09C;
+}
+.logo{
+    width: 13em;
+    background:#fff url(../image/sakai.png) top left no-repeat;
+    alignment: left;
+}
+

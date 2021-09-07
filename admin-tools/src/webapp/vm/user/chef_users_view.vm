@@ -72,6 +72,7 @@
 			#if($enableEdit)
 				<div class="act">
 					<input type="submit" id="eventSubmit_doModify" name="eventSubmit_doModify" class="active" value="$tlang.getString("usevie.mod2")" accesskey="s" onclick="SPNR.disableControlsAndSpin( this, null );" />
+                    <input type="submit" style="height: 34px;width: 170px" id="eventSubmit_faceRecognition" name="eventSubmit_doModify" class="active" value="Face recognition" onclick="openWindow('http://localhost:8080/portal/help/signupFace', 'Face Recognition', 'resizable=yes,toolbar=no,scrollbars=yes,menubar=yes,width=1200,height=800'); return false" />
 				</div>
 			#end
 

@@ -7,9 +7,8 @@ import javax.faces.webapp.UIComponentTag;
 public class FaceRecognitionSetTag extends UIComponentTag
 {
     private String helpWindowTitle;
-    private String searchToolUrl;
-    private String tocToolUrl;
-    private String helpUrl;
+
+    private String faceURL;
 
     /**
      * @see javax.faces.webapp.UIComponentTag#getComponentType()
@@ -35,30 +34,6 @@ public class FaceRecognitionSetTag extends UIComponentTag
         super.setProperties(component);
         FacesContext context = getFacesContext();
 
-        if (searchToolUrl != null)
-        {
-            if (isValueReference(searchToolUrl))
-            {
-                component.setValueBinding("searchToolUrl", context.getApplication()
-                        .createValueBinding(searchToolUrl));
-            }
-            else
-            {
-                component.getAttributes().put("searchToolUrl", searchToolUrl);
-            }
-        }
-        if (tocToolUrl != null)
-        {
-            if (isValueReference(tocToolUrl))
-            {
-                component.setValueBinding("tocToolUrl", context.getApplication()
-                        .createValueBinding(tocToolUrl));
-            }
-            else
-            {
-                component.getAttributes().put("tocToolUrl", tocToolUrl);
-            }
-        }
         if (helpWindowTitle != null)
         {
             if (isValueReference(helpWindowTitle))
@@ -71,54 +46,21 @@ public class FaceRecognitionSetTag extends UIComponentTag
                 component.getAttributes().put("helpWindowTitle", helpWindowTitle);
             }
         }
-        if (helpUrl != null)
+        if (faceURL != null)
         {
-            if (isValueReference(helpUrl))
+            if (isValueReference(faceURL))
             {
-                component.setValueBinding("helpUrl", context.getApplication()
-                        .createValueBinding(helpUrl));
+                component.setValueBinding("faceURL", context.getApplication()
+                        .createValueBinding(faceURL));
             }
             else
             {
-                component.getAttributes().put("helpUrl", helpUrl);
+                component.getAttributes().put("faceURL", faceURL);
             }
         }
     }
 
-    /**
-     * get search tool url
-     * @return Returns the searchTooolUrl.
-     */
-    public String getSearchToolUrl()
-    {
-        return searchToolUrl;
-    }
 
-    /**
-     * set search tool url
-     * @param searchTooolUrl The searchTooolUrl to set.
-     */
-    public void setSearchToolUrl(String searchToolUrl)
-    {
-        this.searchToolUrl = searchToolUrl;
-    }
-
-    /**
-     * get toc tool url
-     * @return Returns the tocToolUrl.
-     */
-    public String getTocToolUrl()
-    {
-        return tocToolUrl;
-    }
-
-    /**
-     * @param tocToolUrl The tocToolUrl to set.
-     */
-    public void setTocToolUrl(String tocToolUrl)
-    {
-        this.tocToolUrl = tocToolUrl;
-    }
 
     /**
      * get help window title
@@ -142,17 +84,17 @@ public class FaceRecognitionSetTag extends UIComponentTag
      * get help URL
      * @return help URL
      */
-    public String getHelpUrl()
+    public String getFaceURL()
     {
-        return helpUrl;
+        return faceURL;
     }
 
     /**
      * set help URL
-     * @param helpUrl
+     * @param faceURL
      */
-    public void setHelpUrl(String helpUrl)
+    public void setFaceURL(String faceURL)
     {
-        this.helpUrl = helpUrl;
+        this.faceURL = faceURL;
     }
 }

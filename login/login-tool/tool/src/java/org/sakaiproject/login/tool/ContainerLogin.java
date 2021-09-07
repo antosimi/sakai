@@ -96,8 +96,6 @@ public class ContainerLogin extends HttpServlet
 	 *        The servlet request.
 	 * @param res
 	 *        The servlet response.
-	 * @throws ServletException.
-	 * @throws IOException.
 	 */
 	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException
 	{

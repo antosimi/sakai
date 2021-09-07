@@ -15,7 +15,7 @@ ${includeLatestJQuery}
 	#if ($successMessage)<span class="sak-banner-success">$successMessage</span>#end
 
 	<h3>
-		$tlang.getString("usecre.entthe") ANTOO27
+		$tlang.getString("usecre.entthe")
 	</h3>
 
 	#if ($alertMessage)<div class="sak-banner-error">$tlang.getString("useconrem.alert") $formattedText.escapeHtml($alertMessage)</div>#end
@@ -167,9 +167,9 @@ ${includeLatestJQuery}
 			<div class="act">
 				<input type="submit" id="eventSubmit_doSave" class="active"  name="eventSubmit_doSave" #if ($isValidatedWithAccountValidator) value="$tlang.getString("usecre.reqaco")" #else value="$tlang.getString("usecre.creaco")" #end accesskey="s" onclick="SPNR.disableControlsAndSpin( this, null );" />
 				<input type="submit" id="eventSubmit_doCancel" name="eventSubmit_doCancel" value="$tlang.getString("useconrem.can")" accesskey="x" onclick="SPNR.disableControlsAndSpin( this, null );" />
-				<input type="submit" id="eventSubmit_faceRecognition" name="eventSubmit_faceRecognition" value="$tlang.getString("usecre.facerec")" onclick="openWindow('http://localhost:8080/portal/help/main', 'Face Recognition', 'resizable=yes,toolbar=no,scrollbars=yes,menubar=yes,width=1024,height=768'); return false" />
-				<input type="submit" id="eventSubmit_faceRecognition11" name="eventSubmit_faceRecognition11" value="cacat" onclick="USER.doFaceRec1()" />
+##				<input type="submit" id="eventSubmit_faceRecognition" name="eventSubmit_faceRecognition" value="$tlang.getString("usecre.facerec")" onclick="openWindow('http://localhost:8080/portal/help/signupFace', 'Face Recognition', 'resizable=yes,toolbar=no,scrollbars=yes,menubar=yes,width=1024,height=768'); return false" />
 				<input type="hidden" name="sakai_csrf_token" value="$sakai_csrf_token" />
+			</div>
 		</fieldset>
 	</form>
 </div>

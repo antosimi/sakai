@@ -646,7 +646,6 @@ public abstract class DbUserService extends BaseUserDirectoryService
 				return null;
 			}
 		}
-
 		protected UserEdit getCachedUserByEid(String eid)
 		{
 			UserEdit user = null;

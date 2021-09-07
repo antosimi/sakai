@@ -221,7 +221,7 @@ public class UserListBean {
 							String s1 = r1.getUserName();
 							String s2 = r2.getUserName();
 							int res = collator.compare(s1!=null? s1.toLowerCase():"", s2!=null? s2.toLowerCase():"");
-							if(sortAscending) return res;
+			 				if(sortAscending) return res;
 							else return -res;
 						}else if(fieldName.equals(SORT_USER_ID)){
 							String s1 = r1.getUserEID();

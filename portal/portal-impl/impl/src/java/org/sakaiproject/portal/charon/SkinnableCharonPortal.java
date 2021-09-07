@@ -800,8 +800,8 @@ public class SkinnableCharonPortal extends HttpServlet implements Portal
 	 *        The servlet request.
 	 * @param res
 	 *        The servlet response.
-	 * @throws javax.servlet.ServletException.
-	 * @throws java.io.IOException.
+	 * @throws javax.servlet.ServletException
+	 * @throws java.io.IOException
 	 */
 	protected void doGet(HttpServletRequest req, HttpServletResponse res)
 	throws ServletException, IOException
@@ -1147,7 +1147,12 @@ public class SkinnableCharonPortal extends HttpServlet implements Portal
 			Session session = SessionManager.getCurrentSession();
 
 			// recognize what to do from the path
+
+			//this request comes from face recognition:
 			String option = URLUtils.getSafePathInfo(req);
+			if(option.equalsIgnoreCase("/help/html/xlogin")){
+				option="/xlogin";
+			}
 
 			// if missing, we have a stray post
 			if ((option == null) || ("/".equals(option)))

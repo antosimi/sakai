@@ -92,9 +92,33 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>face_training</servlet-name>
-      <!-- <url-pattern>/html/add</url-pattern> -->
-      <url-pattern>/html/bla.jsp</url-pattern>
-       <!-- <url-pattern>/html/bla</url-pattern> -->
+        <!--<url-pattern>/html/bla.jsp</url-pattern> -->
+        <url-pattern>/html/signupFace.jsp</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>face_recognition_login</servlet-name>
+        <servlet-class>org.sakaiproject.tool.help.FaceRecognitionLoginServlet</servlet-class>
+        <load-on-startup> 4 </load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>face_recognition_login</servlet-name>
+        <!-- <url-pattern>/html/add</url-pattern> -->
+        <url-pattern>/html/faceLogin.jsp</url-pattern>
+        <!-- <url-pattern>/html/bla</url-pattern> -->
+    </servlet-mapping>
+
+<!--    <servlet>-->
+<!--        <servlet-name>face_recognition_xlogin</servlet-name>-->
+<!--        <servlet-class>org.sakaiproject.login.tool.SkinnableLogin</servlet-class>-->
+<!--        <load-on-startup> 5 </load-on-startup>-->
+<!--    </servlet>-->
+
+<!--    <servlet-mapping>-->
+<!--        <servlet-name>face_recognition_xlogin</servlet-name>-->
+<!--        &lt;!&ndash; <url-pattern>/html/add</url-pattern> &ndash;&gt;-->
+<!--        <url-pattern>/html/xloginFaceRec.jsp</url-pattern>-->
+<!--        &lt;!&ndash; <url-pattern>/html/bla</url-pattern> &ndash;&gt;-->
+<!--    </servlet-mapping>-->
 
 </web-app>

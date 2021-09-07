@@ -1,8 +1,6 @@
 //this is a script on how to open, retieve data and train web camera
-
 //this will open the web camera:
 var video = document.querySelector("#videoElement");
-var video_width = document.getElementById("videoElement").wid;
 var img_upload ;
 var base64FromPhoto;
 function openWebCamera() {
@@ -31,8 +29,6 @@ function takepicture() {
         context.drawImage(video, 0, 0, video.clientWidth, video.clientHeight);
 
         base64FromPhoto = canvas.toDataURL('image/png').split(';base64,')[1];
-        document.getElementById("ceva2").innerHTML = base64FromPhoto;
-        //photo.setAttribute('src', data);
     } else {
        // clearphoto();
     }
@@ -40,71 +36,49 @@ function takepicture() {
 
 function trimiteCeva(){
     debugger;
-
-    // var xhr = new XMLHttpRequest();
-    // xhr.onreadystatechange = function() {
-    //     debugger;
-    //     if (xhr.readyState == 4) {
-    //         debugger;
-    //         document.getElementById("ceva1").innerHTML = xhr.responseText;
-    //         var data = xhr.responseText;
-    //         alert(data);
-    //     }
-    // }
-
+    //First of all we take a photo:
+    takepicture();
 
     var email_toSend = document.getElementById("email_tag");
-    var fd = new FormData();
-    var new_blob = base64ToBlob(base64FromPhoto, 'image/png');
+
     var val_trimisa;
     if(img_upload!=null){
         val_trimisa=img_upload;
     }else{
         val_trimisa=base64FromPhoto
     }
-    fd.append('photo', new_blob);
-    // xhr.open('GET', 'bla', true);
-    // xhr.send(params);
+    var final_val2send=email_toSend.value + " ##### " + val_trimisa;
+
     $.ajax({
         type: "POST",
         contentType : false,
         processData: false,
       //dataType : 'json',
-        url: "bla",
-        data: email_toSend.value + " ##### " + val_trimisa,
+        url: "signupFace",
+        data: final_val2send,
         headers:{
-            "Content-Length":new_blob.length
+            "Content-Length": final_val2send.length
         },
         success :function(result) {
             // do what ever you want with data
             debugger;
-             var mama=result;
+            if(result==true){
+                successfulLogin();
+            }else{
+                failedLogin();
+            }
+        },
+        error: function (resp,text) {
+            debugger;
+            if(resp.status==404 && text=="error"){
+                wrongEmail();
+            }
         }
+
     });
 }
 
-function base64ToBlob(base64, mime)
-{
-    mime = mime || '';
-    var sliceSize = 1024;
-    var byteChars = window.atob(base64);
-    var byteArrays = [];
 
-    for (var offset = 0, len = byteChars.length; offset < len; offset += sliceSize) {
-        var slice = byteChars.slice(offset, offset + sliceSize);
-
-        var byteNumbers = new Array(slice.length);
-        for (var i = 0; i < slice.length; i++) {
-            byteNumbers[i] = slice.charCodeAt(i);
-        }
-
-        var byteArray = new Uint8Array(byteNumbers);
-
-        byteArrays.push(byteArray);
-    }
-
-    return new Blob(byteArrays, {type: mime});
-}
 /*const getBase64FromUrl = async (url) => {
     const data = await fetch(url);
     const blob = await data.blob();
@@ -143,7 +117,6 @@ function readImage(input) {
             $('#base').text( e.target.result );
             debugger;
             img_upload=e.target.result.split(';base64,')[1];
-            document.getElementById("oduda").innerHTML = img_upload;
         };
         FR.readAsDataURL( input.files[0] );
 
@@ -154,4 +127,21 @@ $("#asd").change(function(){
     readImage( this );
 });
 
-//this will close the web camera:
+function successfulLogin(){
+    debugger;
+    document.getElementById("resultMsg").style.color="#00688b";
+    document.getElementById("resultMsg").innerHTML = "Face recognition train succeed";
+    document.getElementById("resultMsg").style.visibility='visible';
+}
+
+function failedLogin(){
+    document.getElementById("resultMsg").style.color="#D71D2D";
+    document.getElementById("resultMsg").innerHTML = "Face recignition train failed";
+    document.getElementById("resultMsg").style.visibility='visible';
+}
+
+function wrongEmail(){
+    document.getElementById("resultMsg").style.color="#D71D2D";
+    document.getElementById("resultMsg").innerHTML = "Wrong email";
+    document.getElementById("resultMsg").style.visibility='visible';
+}

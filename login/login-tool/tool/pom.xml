@@ -121,6 +121,12 @@
 	      <version>1.0</version>
 	      <scope>provided</scope>
       </dependency>
+      <dependency>
+          <groupId>org.sakaiproject.kernel</groupId>
+          <artifactId>sakai-kernel-impl</artifactId>
+          <version>20-SNAPSHOT</version>
+          <scope>compile</scope>
+      </dependency>
 
   </dependencies>
   <build>
@@ -135,5 +141,6 @@
   </build>
   <properties>
   	<maven.test.redirectTestOutputToFile>true</maven.test.redirectTestOutputToFile>
+      <deploy.target>shared</deploy.target>
   </properties>
 </project>

@@ -53,8 +53,8 @@ import org.sakaiproject.util.ResourceLoader;
  */
 public class HelpFrameSetRender extends Renderer
 {
-  //private static String DEFAULT_WELCOME_PAGE = "html/help.html";
-  private static String DEFAULT_WELCOME_PAGE = "html/openWebCam.html";
+  private static String DEFAULT_WELCOME_PAGE = "html/help.html";
+  //private static String DEFAULT_WELCOME_PAGE = "html/openWebCam.html";
 
   private static String HELP_DOC_REGEXP = org.sakaiproject.api.app.help.HelpManager.HELP_DOC_REGEXP;
   

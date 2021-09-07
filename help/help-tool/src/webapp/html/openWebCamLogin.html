@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
     <script defer src="../js/face-api.min.js"></script>
-    <script defer src="../js/trainWebCamera.js"></script>
+    <script defer src="../js/faceRecLogin.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
 
     <meta charset="utf-8">
@@ -24,18 +24,18 @@
 
     <div class="container-left">
         <div class="inside-container">
-            <p class="login-title">Welcome!</p>
-            <p class="login-subtitle">Sign in using the face recognition feature to store results, evolution and more.</p>
+            <p class="login-title">Welcome back!</p>
+            <p class="login-subtitle">Login using the face recognition feature to see your results, evolution and more.</p>
 
             <label for="email_tag" id="face_rec_email_label" style="display: none"></label>
-            <input type="text" id="email_tag" name="email_tag" placeholder="confirm email">
+            <input type="text" id="email_tag" name="email_tag" placeholder="user email">
 
             <div class="buttons-container">
                 <p class="button" onclick="openWebCamera()">Try it</p>
                 <p class="button" onclick="trimiteCeva()">Submit</p>
             </div>
 
-            <p class="login-subtitle" id="resultMsg">Message</p>
+            <p class="login-subtitle" id="resultMsg" >Message</p>
 
             <img class="geometric" src="../image/geometric.jpg" alt="figure"/>
         </div>

@@ -1,8 +1,8 @@
 package org.sakaiproject.tool.help;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.StringUtils;
+import org.apache.commons.net.util.Base64;
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.opencv_java;
 import org.opencv.core.*;
@@ -35,6 +35,7 @@ import org.sakaiproject.component.cover.ComponentManager;
 import org.sakaiproject.db.api.SqlService;
 import org.sakaiproject.user.impl.DBFaceRecognitionService;
 import sun.misc.BASE64Decoder;
+import sun.misc.BASE64Encoder;
 import sun.reflect.Reflection;
 import org.opencv.face.EigenFaceRecognizer;
 
@@ -56,81 +57,82 @@ public class FaceRecognitionServlet extends HttpServlet{
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
        // super.doPost(req, resp);
         String ph = readParam(req);
+        if(emailParam ==null){
+            resp.sendError(HttpServletResponse.SC_NOT_FOUND, "This email does not exists.");
+            return;
+        }
         Mat src = faceDetetction(ph);
         dbFaceRecognitionService=new DBFaceRecognitionService();
-        //dbFaceRecognitionService.insertValues("admin",photo);
-        //dbFaceRecognitionService.readValues();
 
-       // readParam(req);
-        faceMatching(dbFaceRecognitionService,src);
-        //int nr_faces = faceDetetction();
+//        MatOfByte matOfByte = new MatOfByte();
+//        Imgcodecs.imencode(".jpg",src,matOfByte);
+//        byte[] byteArray = matOfByte.toArray();
 //
-//        PrintWriter out = resp.getWriter();
-//        out.println("Buna Anto raspunsul la adunare este = " + nr_faces);
+//        String base64OfImg = Base64.encodeBase64(byteArray).toString();
 
-//        int a= Integer.parseInt(req.getParameter("num1"));
-//        int b= Integer.parseInt(req.getParameter("num2"));
-//        int c=a+b;
-//
-//        PrintWriter out = resp.getWriter();
-//        out.println("Buna Anto raspunsul la adunare este = " + c);
+//        File file= new File("/Users/antoniasimionescu/IdeaProjects/sakai_final_destination/help/help-tool/src/resources/anto1.png");
+//        FileInputStream fileInputStreamReader = new FileInputStream(file);
+//        byte[] bytes = new byte[(int)file.length()];
+//        fileInputStreamReader.read(bytes);
+//        String base64OfImg = Base64.encodeBase64(bytes).toString();
+        BufferedImage img = ImageIO.read(new File("/Users/antoniasimionescu/IdeaProjects/sakai_final_destination/help/help-tool/src/resources/anto1.png"));
+        String base64OfImg = encodeToString(img, "png");
+
+        boolean result = dbFaceRecognitionService.insertValues(emailParam,base64OfImg);
+        resp.setContentType("application/json");
+        resp.setCharacterEncoding("UTF-8");
+        try (PrintWriter out = resp.getWriter()) {
+            out.println(result);
+            out.close();
+        }
+
+
+        //faceMatching(dbFaceRecognitionService,src);
+
     }
 
     private Mat  faceDetetction(String photoMatch) {
-        // Loading the OpenCV core library
-        //System.loadLibrary( Core.NATIVE_LIBRARY_NAME );
-       // System.load( "/opencv-452.jar" );
-       // nu.pattern.OpenCV.loadShared(); //add this
 
+        // String file = "/Users/antoniasimionescu/IdeaProjects/sakai_final_destination/help/help-tool/src/resources/anto1.png";
+        //Mat src = Imgcodecs.imread(file);
+        Mat src = base642Mat(photoMatch);
+        Mat  image_roi=null;
 
-            // Reading the Image from the file and storing it in to a Matrix object
-            //String file = "/Users/antoniasimionescu/Desktop/face_det/faces_for_db/anto1.png";
-            String file = "/Users/antoniasimionescu/IdeaProjects/sakai_final_destination/help/help-tool/src/resources/anto1.png";
-            Mat src = Imgcodecs.imread(file);
-           // Mat src = base642Mat(photoMatch);
-            Mat  image_roi=null;
+        //varianta mai ok sa ia poza direct din param, sa nu mai salveze local
+        //Mat src = base642Mat(photoBase64);
 
-            //varianta mai ok sa ia poza direct din param, sa nu mai salveze local
-            //Mat src = base642Mat(photoBase64);
+        // Instantiating the CascadeClassifier
+        String xmlFile = "/Users/antoniasimionescu/IdeaProjects/sakai_final_destination/help/help-tool/src/lbpcascades/lbpcascade_frontalface.xml";
+        CascadeClassifier classifier = new CascadeClassifier(xmlFile);
 
-            // Instantiating the CascadeClassifier
-            String xmlFile = "/Users/antoniasimionescu/IdeaProjects/sakai_final_destination/help/help-tool/src/lbpcascades/lbpcascade_frontalface.xml";
-            CascadeClassifier classifier = new CascadeClassifier(xmlFile);
+        // Detecting the face in the snap
+        MatOfRect faceDetections = new MatOfRect();
+        classifier.detectMultiScale(src, faceDetections);
 
-            // Detecting the face in the snap
-            MatOfRect faceDetections = new MatOfRect();
-            classifier.detectMultiScale(src, faceDetections);
+        Rect rectCrop = null;
+        // Drawing boxes
+        for (Rect rect : faceDetections.toArray()) {
+            Imgproc.rectangle(
+                    src,                                               // where to draw the box
+                    new Point(rect.x, rect.y),                            // bottom left
+                    new Point(rect.x + rect.width, rect.y + rect.height), // top right
+                    new Scalar(0, 0, 255),
+                    3                                                     // RGB colour
+            );
+            //Cropping the image:
+            //rectCrop = new Rect(rect.x, rect.y, rect.width, rect.height);
+            rectCrop = new Rect(
+                    new Point(rect.x, rect.y),                            // bottom left
+                    new Point(rect.x + rect.width, rect.y + rect.height) // top right
+            );
+            Size scaleSize = new Size(300,300);
+            Mat image_intermediar= new Mat(src, rectCrop);
+            image_roi=new Mat();
+            Imgproc.resize( image_intermediar, image_roi, scaleSize);
+            // Writing the image
+            Imgcodecs.imwrite("/Users/antoniasimionescu/IdeaProjects/sakai_final_destination/help/help-tool/src/resources/anto1.png", image_roi);
 
-            Rect rectCrop = null;
-            // Drawing boxes
-            for (Rect rect : faceDetections.toArray()) {
-                Imgproc.rectangle(
-                        src,                                               // where to draw the box
-                        new Point(rect.x, rect.y),                            // bottom left
-                        new Point(rect.x + rect.width, rect.y + rect.height), // top right
-                        new Scalar(0, 0, 255),
-                        3                                                     // RGB colour
-                );
-                //Cropping the image:
-                //rectCrop = new Rect(rect.x, rect.y, rect.width, rect.height);
-                rectCrop = new Rect(
-                        new Point(rect.x, rect.y),                            // bottom left
-                        new Point(rect.x + rect.width, rect.y + rect.height) // top right
-                );
-                Size scaleSize = new Size(300,300);
-                Mat image_intermediar= new Mat(src, rectCrop);
-                image_roi=new Mat();
-                Imgproc.resize( image_intermediar, image_roi, scaleSize);
-                // Writing the image
-                Imgcodecs.imwrite("/Users/antoniasimionescu/Desktop/face_det/faces_cropped/cacat25.jpg", image_roi);
-                Imgproc.cvtColor(image_roi, image_roi, Imgproc.COLOR_BGR2GRAY);
-
-
-            }
-
-
-        // Writing the image
-        //Imgcodecs.imwrite("/Users/antoniasimionescu/Desktop/face_det/cacat1.jpg", src);
+        }
 
         System.out.println("Image Processed");
         return image_roi;
@@ -159,7 +161,7 @@ public class FaceRecognitionServlet extends HttpServlet{
         }
         emailParam = stringBuilder.toString().split(" ##### ")[0];
         String body = stringBuilder.toString().split(" ##### ")[1];
-        savePhotoLocally(body);
+        //savePhotoLocally(body);
 
         return body;
     }
@@ -239,7 +241,7 @@ public class FaceRecognitionServlet extends HttpServlet{
          Size scaleSize = new Size(300,300);
          matImage= new Mat();
          Imgproc.resize( src, matImage, scaleSize);
-         Imgproc.cvtColor(matImage, matImage, Imgproc.COLOR_BGR2GRAY);
+         //Imgproc.cvtColor(matImage, matImage, Imgproc.COLOR_BGR2GRAY);
          return matImage;
     }
 
@@ -277,4 +279,22 @@ public class FaceRecognitionServlet extends HttpServlet{
         return mat;
     }
 
+    public static String encodeToString(BufferedImage image, String type) {
+        String imageString = null;
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+
+        try {
+            ImageIO.write(image, type, bos);
+            byte[] imageBytes = bos.toByteArray();
+
+            BASE64Encoder encoder = new BASE64Encoder();
+            imageString = encoder.encode(imageBytes);
+
+            bos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return imageString;
+    }
 }
+

@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Map;
 
 import javax.security.auth.login.LoginException;
 import javax.servlet.ServletConfig;
@@ -56,6 +57,8 @@ import org.sakaiproject.site.api.ToolConfiguration;
 import org.sakaiproject.tool.api.Session;
 import org.sakaiproject.tool.api.Tool;
 import org.sakaiproject.tool.cover.SessionManager;
+import org.sakaiproject.user.api.AuthenticationManager;
+import org.sakaiproject.user.impl.DBFaceRecognitionService;
 import org.sakaiproject.util.ResourceLoader;
 import org.sakaiproject.util.Web;
 import org.sakaiproject.util.RequestFilter;
@@ -70,6 +73,8 @@ public class SkinnableLogin extends HttpServlet implements Login {
 
 	/** Session attribute used to store a message between steps. */
 	protected static final String ATTR_MSG = "notify";
+	private String usID="antosimi";
+	private String pass="12345678";
 
 	/** Session attribute set and shared with ContainerLoginTool: URL for redirecting back here. */
 	public static final String ATTR_RETURN_URL = "sakai.login.return.url";
@@ -345,10 +350,26 @@ public class SkinnableLogin extends HttpServlet implements Login {
 		else
 		{
 			LoginCredentials credentials = new LoginCredentials(req);
+
+			String emailFaceRec= req.getHeader("Face-Recognition-Login-OK");
 			credentials.setSessionId(session.getId());
+			if(emailFaceRec!=null){
+				//Extra by ANTO 5454:
+
+				DBFaceRecognitionService dbFaceRecognitionService = new DBFaceRecognitionService();
+				emailFaceRec = emailFaceRec.trim();
+				Map<Integer,String> userValList = dbFaceRecognitionService.getUserFromEmail(emailFaceRec);
+
+				String mama = userValList.get(1);
+				credentials.setIdentifier(usID);
+				credentials.setPassword(pass);
+				credentials.setSessionId(session.getId());
+			}
 
 			try {
+
 				loginService.authenticate(credentials);
+
 				String returnUrl = (String) session.getAttribute(Tool.HELPER_DONE_URL);
 				complete(returnUrl, session, tool, res);
 
@@ -397,6 +418,7 @@ public class SkinnableLogin extends HttpServlet implements Login {
 						if ( portalUrl != null && portalUrl.indexOf("/site/") < 1 && portalUrl.startsWith(actualPortal) ) {
 					rcontext.put("doCancel", Boolean.TRUE);
 				}
+
 
 				sendResponse(rcontext, res, "xlogin", null);
 			}
